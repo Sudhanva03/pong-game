@@ -1,0 +1,165 @@
+<!--        Pong game Made by me                                                      -->
+<!--        Instructions: wasd    :- control LHS paddle                               -->
+<!--                      arrows  :- control RHS paddle                            -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pong game for Sank</title>
+
+    <style>
+        #moveableObject {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        #shapeContainer {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" style="border:1px solid #000000; width: 100%; height: 100%;"></canvas>
+    <script>
+
+        let topPosition1 = 50; // Position of paddle 1 
+        let topPosition2 = 50; // Position of paddle 2 
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const paddleHeight = 70; // Assuming height of the paddles
+        const paddleWidth = 20;
+        let moveUp1 = false, moveDown1 = false;
+        let moveUp2 = false, moveDown2 = false;
+        let gamePaused = false;
+
+        //Drawing the ball position in court
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballRadius = 10;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawRectangles();
+
+        function drawRectangles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(50, topPosition1, paddleWidth, paddleHeight); // Draw LHS paddle
+            ctx.fillRect(canvas.width - 100, topPosition2, paddleWidth, paddleHeight); // Draw RHS paddle
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);    // The line in the middle
+            ctx.strokeStyle = '#000000'; // Line color
+            ctx.lineWidth = 2; // Line width
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);  //The actual ball drawing in court
+            ctx.fillStyle = '#000000'; // Ball color
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function updatePosition() {
+            if (!gamePaused) { // Only update position if the game is not paused
+                if (moveDown1 && topPosition1 + paddleHeight < canvas.height) {
+                    topPosition1 += 10;
+                }
+                if (moveUp1 && topPosition1 > 0) {
+                    topPosition1 -= 10;
+                }
+                if (moveDown2 && topPosition2 + paddleHeight < canvas.height) {
+                    topPosition2 += 10;
+                }
+                if (moveUp2 && topPosition2 > 0) {
+                    topPosition2 -= 10;
+                }
+
+                // Update ball position
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+
+                // Ball collision with top and bottom walls
+                if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
+                    ballSpeedY = -ballSpeedY;
+                }
+
+                // Ball collision with paddles
+                if (ballX - ballRadius < 70 && ballY > topPosition1 && ballY < topPosition1 + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                }
+                if (ballX + ballRadius > canvas.width - 100 && ballY > topPosition2 && ballY < topPosition2 + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                }
+
+                // Ball reset if it goes out of bounds
+                if (ballX - ballRadius < 0 || ballX + ballRadius > canvas.width) {
+                    ballX = canvas.width / 2;
+                    ballY = canvas.height / 2;
+                }
+
+                drawRectangles();
+            }
+            requestAnimationFrame(updatePosition);  //tried interval function here, didnt work
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                gamePaused = !gamePaused; // Toggle game pause state
+            }
+            if (!gamePaused) {
+                if (event.key === 'ArrowDown') {
+                    moveDown2 = true; // RHS paddle down
+                }
+                if (event.key === 'ArrowUp') {
+                    moveUp2 = true; // RHS paddle up
+                }
+                if (event.key === 's') {
+                    moveDown1 = true; // LHS paddle down
+                }
+                if (event.key === 'w') {
+                    moveUp1 = true; // LHS paddle up
+                }
+            }
+        });
+
+        document.addEventListener('keyup', function (event) {
+            if (!gamePaused) {
+                if (event.key === 'ArrowDown') {
+                    moveDown2 = false; // Stop moving RHS paddle down
+                }
+                if (event.key === 'ArrowUp') {
+                    moveUp2 = false; // Stop moving RHS paddle up
+                }
+                if (event.key === 's') {
+                    moveDown1 = false; // Stop moving LHS paddle down
+                }
+                if (event.key === 'w') {
+                    moveUp1 = false; // Stop moving LHS paddle up
+                }
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;       //this is important if the screen is minimized or wanna play on the phone
+            drawRectangles();                         //resizes the canvas to fit on most devices
+        });
+
+        requestAnimationFrame(updatePosition); //Start the update loop
+        //setInterval(updatePosition, 100); <-- not working for some reason :/. Used animation frame instead
+    </script>
+</body>
+
+</html>
