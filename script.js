@@ -55,7 +55,9 @@ function updateScore(player) {                 //
 }
 
 function displayScore() {
-    document.getElementById('scoreboard').innerHTML = `Player 1: ${score1} | Player 2: ${score2}`;
+    //document.getElementById('scoreboard').innerHTML = `Player 1: ${score1} | Player 2: ${score2}`;
+    document.querySelector('#scoreboard .player1_color').innerHTML = `Player 1: ${score1} `; 
+    document.querySelector('#scoreboard .player2_color').innerHTML = `Player 2: ${score2} `; 
     console.log("Scoreboard updated:", score1, score2);
 }
 
