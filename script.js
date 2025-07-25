@@ -11,6 +11,7 @@ let moveUp2 = false, moveDown2 = false;
 let gamePaused = false;
 let score1 = 0;
 let score2 = 0;
+let scoreLimit = 10; //sets default score limit if none if given
 // Drawing the ball position in court
 let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
@@ -44,6 +45,18 @@ function drawRectangles() {
     ctx.closePath();
 }
 
+function startGame() {
+    scoreLimit = parseInt(document.getElementById('scoreLimit').value) || 10;
+    
+    document.getElementById('menuScreen').style.display = 'none';
+    document.getElementById('myCanvas').style.display = 'block';
+    document.getElementById('scoreboard').style.display = 'block';
+
+    console.log("Starting game with score limit:", scoreLimit);
+    
+    requestAnimationFrame(updatePosition); // Start the game loop
+}
+
 function updateScore(player) {                 //
     console.log("Updating score for", player); //
     if (player === 'player1') {                //
@@ -62,13 +75,21 @@ function displayScore() {
 }
 
 function checkScore() {
-    if (ballX - ballRadius < 0) {                      //
-        updateScore('player2');                        //
-        resetBall();                                   //
-    } else if (ballX + ballRadius > canvas.width) {    //        Score changes depending on which side of the wall the ball come in contact with 
-        updateScore('player1');                        //
-        resetBall();                                   //
-    }                                                  //
+    if (ballX - ballRadius < 0) {
+        updateScore('player2');
+        resetBall();
+    } else if (ballX + ballRadius > canvas.width) {
+        updateScore('player1');
+        resetBall();
+    }
+
+    if (score1 >= scoreLimit || score2 >= scoreLimit) {
+        gamePaused = true;
+        setTimeout(() => {
+            alert(`Game Over!\n${score1 > score2 ? 'Player 1' : 'Player 2'} Wins!`);
+            location.reload(); // Reload to go back to menu
+        }, 100);
+    }
 }
 
 function resetBall() {                                       //
@@ -165,4 +186,4 @@ window.addEventListener('resize', function () {
     drawRectangles(); // Resizes the canvas to fit on most devices
 });
 
-requestAnimationFrame(updatePosition); // Start the update loop
+//requestAnimationFrame(updatePosition); // Start the update loop
