@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paddle Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    #menuScreen, #scoreboard, #lobby {
+      margin-top: 20px;
+    }
+    canvas {
+      display: none;
+      border: 2px solid #000;
+      margin-top: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menuScreen">
+    <h1>Paddle Game</h1>
+
+    <label for="scoreLimit">Score Limit:</label>
+    <input type="number" id="scoreLimit" value="10" min="1" />
+
+    <div>
+      <button id="offlineMultiplayerBtn">Offline Multiplayer</button>
+      <button id="createRoomBtn">Create Online Room</button>
+      <button id="joinRoomBtn">Join Online Room</button>
+    </div>
+  </div>
+
+  <div id="lobby" style="display: none;"></div>
+
+  <div id="scoreboard" style="display: none;">
+    <p>Player 1: <span id="player1Score">0</span></p>
+    <p>Player 2: <span id="player2Score">0</span></p>
+  </div>
+
+  <canvas id="myCanvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>

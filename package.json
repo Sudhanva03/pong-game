@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "ws": "^8.18.3"
+  },
+  "name": "pong-game",
+  "version": "1.0.0",
+  "description": "Just open in any browser of your choice :)\r ## Controls: \r **Player 1** - wasd (Left side paddle)  \r **Player 2** - arrows (Right side paddle)",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sudhanva03/pong-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sudhanva03/pong-game/issues"
+  },
+  "homepage": "https://github.com/Sudhanva03/pong-game#readme"
+}
